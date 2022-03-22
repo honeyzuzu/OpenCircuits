@@ -1,6 +1,6 @@
 import {ARROW_TRANSLATE_DISTANCE_NORMAL,
         ARROW_TRANSLATE_DISTANCE_SMALL,
-        LEFT_MOUSE_BUTTON} from "core/utils/Constants";
+        LEFT_MOUSE_BUTTON, MIDDLE_MOUSE_BUTTON} from "core/utils/Constants";
 
 import {V, Vector} from "Vector";
 
@@ -25,7 +25,7 @@ export const TranslateTool: Tool = (() => {
     let activatedButton: string | number;
 
     return {
-        shouldActivate(event: Event, {locked, currentlyPressedObject, selections}: CircuitInfo): boolean {
+        shouldActivate(event: Event, {locked, currentlyPressedObject, selections, input}: CircuitInfo): boolean {
             if (locked)
                 return false;
             // Activate if the user is pressing down on an object or an arrow key
@@ -34,7 +34,11 @@ export const TranslateTool: Tool = (() => {
                    (event.type === "keydown" && (event.key === "ArrowLeft" || event.key === "ArrowRight" || 
                                                   event.key === "ArrowUp"  || event.key === "ArrowDown")
                                              && ((selections.any((c) => c instanceof Component) &&
-                                                  selections.get().length > 0)));
+                                                  selections.get().length > 0)) || (event.type === "keydown" && ((event.key === "Alt") ||  
+                                                  (event.key === "ArrowLeft" || event.key === "ArrowRight" || 
+                                                   event.key === "ArrowUp" || event.key === "ArrowDown" ))) ||
+                   (event.type === "mousedrag" && (event.button === MIDDLE_MOUSE_BUTTON ||
+                                                   input.getTouchCount() === 2)));
         },
         shouldDeactivate(event: Event, {}: CircuitInfo): boolean {
             // Deactivate by releasing mouse or an arrow key
