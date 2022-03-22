@@ -1,12 +1,16 @@
 import {MIDDLE_MOUSE_BUTTON,
         ARROW_PAN_DISTANCE_NORMAL,
-        ARROW_PAN_DISTANCE_SMALL} from "core/utils/Constants";
+        ARROW_PAN_DISTANCE_SMALL,
+        LEFT_MOUSE_BUTTON} from "core/utils/Constants";
 import {Vector} from "Vector";
 
 import {Event}       from "core/utils/Events";
 import {CircuitInfo} from "core/utils/CircuitInfo";
 
 import {Tool} from "core/tools/Tool";
+
+import {Component} from "core/models";
+
 
 
 export const PanTool: Tool = (() => {
@@ -23,14 +27,22 @@ export const PanTool: Tool = (() => {
                    (event.type === "mousedrag" && (event.button === MIDDLE_MOUSE_BUTTON ||
                                                    input.getTouchCount() === 2)));
         },
-        shouldDeactivate(event: Event, {}: CircuitInfo): boolean {
+        shouldDeactivate(event: Event, {currentlyPressedObject, selections}: CircuitInfo): boolean {
             // Deactivate if stopped dragging by releasing mouse
             //  or if no dragging happened and "Alt" was released
             //  or if one of the arrow keys were released
-            return (event.type === "mouseup") ||
+            return ((event.type === "mouseup") ||
                    (event.type === "keyup" && ((!isDragging && event.key === "Alt" || 
                                                (event.key === "ArrowLeft" || event.key === "ArrowRight" || 
-                                                event.key === "ArrowUp" || event.key === "ArrowDown"))))
+                                                event.key === "ArrowUp" || event.key === "ArrowDown")))) ||
+                                                (event.type === "mousedrag" && event.button === LEFT_MOUSE_BUTTON &&
+                    currentlyPressedObject instanceof Component) ||
+                   (event.type === "keydown" && (event.key === "ArrowLeft" || event.key === "ArrowRight" || 
+                                                  event.key === "ArrowUp"  || event.key === "ArrowDown")
+                                             && ((selections.any((c) => c instanceof Component) &&
+                                                  selections.get().length > 0)))
+                                                )
+            
         },
 
 
