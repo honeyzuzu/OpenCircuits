@@ -35,13 +35,7 @@ export const PanTool: Tool = (() => {
                    (event.type === "keyup" && ((!isDragging && event.key === "Alt" || 
                                                (event.key === "ArrowLeft" || event.key === "ArrowRight" || 
                                                 event.key === "ArrowUp" || event.key === "ArrowDown")))) ||
-                                                (event.type === "mousedrag" && event.button === LEFT_MOUSE_BUTTON &&
-                    currentlyPressedObject instanceof Component) ||
-                   (event.type === "keydown" && (event.key === "ArrowLeft" || event.key === "ArrowRight" || 
-                                                  event.key === "ArrowUp"  || event.key === "ArrowDown")
-                                             && ((selections.any((c) => c instanceof Component) &&
-                                                  selections.get().length > 0)))
-                                                )
+                                                (event.type === "mousedrag" && event.button === LEFT_MOUSE_BUTTON ))
             
         },
 
