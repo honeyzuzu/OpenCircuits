@@ -137,7 +137,7 @@ async function Init(): Promise<void> {
                     PasteHandler((data) => DigitalPaste(data, info, undefined)),
                     SaveHandler(() => store.getState().user.isLoggedIn && helpers.SaveCircuitRemote()),
                 ]),
-                TranslateTool, PanTool, 
+                PanTool, TranslateTool, 
                 RotateTool, WiringTool,
                 SplitWireTool, SelectionBoxTool
             );
